@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/MainLayout/Footer";
+import Menu from "../components/MainLayout/Menu";
 import { useUserData } from "../hook/useUserData";
 
 export default function MainLayout() {
@@ -37,9 +38,6 @@ export default function MainLayout() {
     <div className="flex h-screen overflow-hidden w-full bg-[#D9D9D9]">
       <Menu
         className="h-screen flex-shrink-0 "
-        userId={userData!.id}
-        userName={getUserName()}
-        onMenuItemClick={handleMenuItemClick}
       />
       <div className="flex-1 overflow-y-auto ">
         <div className="sticky top-0 z-30 ">

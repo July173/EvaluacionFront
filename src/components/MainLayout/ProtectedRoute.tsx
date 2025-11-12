@@ -12,32 +12,49 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useIdleTimer from "../../hook/userIdleTimer";
 import SessionExpiredModal from "./SessionExpiredModal";
+import { useAuth } from "../../hook/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const userData = localStorage.getItem("user_data");
+  const { accessToken, logout } = useAuth();
   const [showSessionExpired, setShowSessionExpired] = useState(false);
   const [sessionExpiredByIdle, setSessionExpiredByIdle] = useState(false);
   const navigate = useNavigate();
 
   // Inactivity hook: removes session and shows modal even if session is already gone
   useIdleTimer(20 * 60 * 1000, () => {
-    localStorage.removeItem("user_data");
+    // Use central logout so tokens and state are cleared consistently
+    try {
+      logout();
+    } catch (e) {
+      // fallback: clear localStorage if logout isn't available for any reason
+      localStorage.removeItem("user_data");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+    }
     setShowSessionExpired(true);
     setSessionExpiredByIdle(true);
   });
 
   // When user accepts in modal, navigate to login
   const handleAcceptLogout = () => {
+    // ensure central logout and navigate to login
+    try {
+      logout();
+    } catch (e) {
+      localStorage.removeItem("user_data");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+    }
     setShowSessionExpired(false);
     setSessionExpiredByIdle(false);
     navigate("/");
   };
 
-  if (userData && !sessionExpiredByIdle) {
+  if (accessToken && !sessionExpiredByIdle) {
     return (
       <>
         {children}

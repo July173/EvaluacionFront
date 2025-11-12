@@ -34,7 +34,7 @@ const Index = () => {
   return (
     <div className="sena-container">
       {renderForm()}
-      <WelcomePanel />
+    
     </div>
   );
 };
