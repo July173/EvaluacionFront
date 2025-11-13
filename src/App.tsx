@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/MainLayout/ProtectedRoute";
 import { AuthProvider } from "./hook/AuthProvider";
 import Index from "./pages/Index";
-import {  NotFound, Home,  } from "./pages/RoutesIndex";
+import { NotFound, Home, Orphanates, SocialWorkers, Parents, Children, ChildOrphanages, Adoptions, AdoptionDetails } from "./pages/RoutesIndex";
 import React from "react";
 import MainLayout from "./layout/MainLayout";
 
@@ -36,6 +36,14 @@ const App = () => {
             {/* Rutas protegidas con layout */}
             <Route element={<ProtectedLayout />}>
               <Route path="/home" element={<Home />} />
+              <Route path="/orphanes" element={<Orphanates />} />
+              <Route path="/socialworkers" element={<SocialWorkers />} />
+              <Route path="/parents" element={<Parents />} />
+              <Route path="/children" element={<Children />} />
+              <Route path="/child-orphanages" element={<ChildOrphanages />} />
+              <Route path="/adoptions" element={<Adoptions />} />
+              <Route path="/adoption-details" element={<AdoptionDetails />} />
+
 
             </Route>
 

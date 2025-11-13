@@ -11,37 +11,45 @@ export default {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getAllChildren(): Promise<ChildDto[]> {
   const res = await fetchWithAuth(base.getAllChildren);
-  return res.json();
+  const data = await res.json().catch(() => []);
+  if (!res.ok) throw data || { message: res.statusText };
+  return data;
   },
 
   async getChildById(id: number): Promise<ChildDto> {
     const url = base.getChildById.replace('{id}', String(id));
   const res = await fetchWithAuth(url);
-  return res.json();
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw data || { message: res.statusText };
+  return data;
   },
 
   async updateChild(id: number, payload: Omit<ChildDto, 'Id'>) {
     const url = base.updateChild.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async deleteChildLogical(id: number) {
     const url = base.deleteChild.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: false }),
+      method: 'DELETE',
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   }
 };

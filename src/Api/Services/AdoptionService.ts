@@ -11,37 +11,45 @@ export default {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getAllAdoptions(): Promise<AdoptionDto[]> {
     const res = await fetchWithAuth(base.getAllAdoptions);
-    return res.json();
+    const data = await res.json().catch(() => []);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getAdoptionById(id: number): Promise<AdoptionDto> {
     const url = base.getAdoptionById.replace('{id}', String(id));
     const res = await fetchWithAuth(url);
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async updateAdoption(id: number, payload: Omit<AdoptionDto, 'Id'>) {
     const url = base.updateAdoption.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async deleteAdoptionLogical(id: number) {
     const url = base.deleteAdoption.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: false }),
+      method: 'DELETE',
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   }
 };

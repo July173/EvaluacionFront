@@ -2,11 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hook/useAuth';
-import { useUserData } from '../../hook/useUserData';
+ import { useAuth } from '../../hook/useAuth';
 import menuService from '../../Api/Services/MenuService';
 import { MenuDto, MenuFormDto, FormItemDto } from '../../Api/types/Menu';
-import logo from '/public/logo.png';
 
 interface MenuItem {
   id: number;
@@ -20,8 +18,7 @@ interface SidebarMenuProps {
 }
 
 const Menu: React.FC<SidebarMenuProps> = ({ className = '' }) => {
-  const { logout } = useAuth();
-  const { userData } = useUserData();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -42,8 +39,8 @@ const Menu: React.FC<SidebarMenuProps> = ({ className = '' }) => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-  // userData.id is the canonical user id in our hook; fall back to null if missing
-  const uid = userData?.id ?? null;
+  // user id from AuthProvider
+  const uid = user?.id ?? null;
   if (!uid) return;
   const data = await menuService.getMenuItems(Number(uid));
         const items: MenuItem[] = [];
@@ -66,7 +63,7 @@ const Menu: React.FC<SidebarMenuProps> = ({ className = '' }) => {
       }
     };
     fetchMenu();
-  }, [userData]);
+  }, [user]);
 
   const grouped: Record<string, MenuItem[]> = {};
   menuItems.forEach(i => {
@@ -83,10 +80,8 @@ const Menu: React.FC<SidebarMenuProps> = ({ className = '' }) => {
   return (
     <div className={`w-64 rounded-xl bg-[linear-gradient(to_bottom_right,_#43A047,_#2E7D32)] text-white flex flex-col m-2 relative ${className} md:h-screen h-auto`}>
       <div className="p-6 flex items-center gap-3 flex-shrink-0">
-        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-          <img src={logo} alt="Logo" className="w-10 h-10" />
-        </div>
-        <h1 className="text-white font-semibold">Autogestión CIES</h1>
+        
+        <h1 className="text-white font-semibold text-2xl">Orphane </h1>
       </div>
 
       <div className="flex-1 flex flex-col min-h-0">
@@ -101,7 +96,10 @@ const Menu: React.FC<SidebarMenuProps> = ({ className = '' }) => {
                   <li key={moduleName}>
                     <button
                       onClick={() => {
-                        setOpenModule(moduleName);
+                        // For the Inicio module, navigate directly to its first form (home)
+                        const firstForm = forms && forms.length ? forms[0] : null;
+                        if (firstForm && firstForm.path) navigate(firstForm.path);
+                        else navigate('/home');
                       }}
                       className={`w-full text-left px-4 py-3 rounded-lg transition-colors hover:bg-white/10`}
                     >

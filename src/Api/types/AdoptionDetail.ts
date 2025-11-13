@@ -3,4 +3,6 @@ export interface AdoptionDetailDto {
   adoption_id: number;
   parent_id: number;
   child_id: number;
+  active ?: boolean;
+
 }

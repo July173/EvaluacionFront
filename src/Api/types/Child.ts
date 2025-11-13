@@ -6,4 +6,6 @@ export interface ChildDto {
   Gender: string;
   AdmissionDate: string; // ISO date
   CurrentStatus: string;
+    active ?: boolean;
+
 }

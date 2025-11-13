@@ -11,37 +11,45 @@ export default {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getAllChildOrphanages(): Promise<ChildOrphanageDto[]> {
     const res = await fetchWithAuth(base.getAllChildren);
-    return res.json();
+    const data = await res.json().catch(() => []);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getChildOrphanageById(id: number): Promise<ChildOrphanageDto> {
     const url = base.getChildById.replace('{id}', String(id));
     const res = await fetchWithAuth(url);
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async updateChildOrphanage(id: number, payload: Omit<ChildOrphanageDto, 'Id'>) {
     const url = base.updateChild.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async deleteChildOrphanageLogical(id: number) {
     const url = base.deleteChild.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: false }),
+      method: 'DELETE',
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   }
 };

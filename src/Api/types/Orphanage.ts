@@ -5,4 +5,6 @@ export interface OrphanageDto {
   Phone: string;
   Capacity: number;
   FoundationDate: string; // ISO date
+    active ?: boolean;
+
 }

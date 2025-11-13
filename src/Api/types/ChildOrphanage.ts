@@ -4,4 +4,6 @@ export interface ChildOrphanageDto {
   orphanage_id: number;
   EntryDate: string; // ISO date
   ExitDate?: string | null; // ISO date or null
+    active ?: boolean;
+
 }

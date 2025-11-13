@@ -5,6 +5,13 @@ const base = ENDPOINTS.Auth;
 
 export default {
   async register(payload: RegisterUserDto) {
+    // Debug: print resolved endpoint so we can confirm the exact URL used by fetch
+    try {
+      console.debug("AuthService.register -> URL:", base.register);
+    } catch (e) {
+      /* ignore in non-browser envs */
+    }
+
     const res = await fetch(base.register, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -6,4 +6,6 @@ export interface ParentDto {
   Phone: string;
   Address: string;
   Occupation: string;
+    active ?: boolean;
+
 }

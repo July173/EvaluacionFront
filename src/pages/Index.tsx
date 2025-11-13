@@ -32,7 +32,7 @@ const Index = () => {
   };
 
   return (
-    <div className="sena-container">
+    <div className="">
       {renderForm()}
     
     </div>

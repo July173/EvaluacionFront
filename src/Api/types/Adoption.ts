@@ -3,4 +3,5 @@ export interface AdoptionDto {
   AdoptionDate: string; // ISO date
   Status: string;
   socialworker_id: number;
+  active ?: boolean;
 }

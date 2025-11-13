@@ -5,4 +5,6 @@ export interface SocialWorkerDto {
   Profession: string;
   Phone: string;
   Email: string;
+    active ?: boolean;
+
 }

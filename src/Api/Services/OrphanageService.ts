@@ -11,37 +11,45 @@ export default {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getAllOrphanages(): Promise<OrphanageDto[]> {
   const res = await fetchWithAuth(base.getAllOrphanages);
-  return res.json();
+  const data = await res.json().catch(() => []);
+  if (!res.ok) throw data || { message: res.statusText };
+  return data;
   },
 
   async getOrphanageById(id: number): Promise<OrphanageDto> {
     const url = base.getOrphanageById.replace('{id}', String(id));
   const res = await fetchWithAuth(url);
-  return res.json();
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw data || { message: res.statusText };
+  return data;
   },
 
   async updateOrphanage(id: number, payload: Omit<OrphanageDto, 'Id'>) {
     const url = base.updateOrphanage.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async deleteOrphanageLogical(id: number) {
     const url = base.deleteOrphanage.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: false }),
+      method: 'DELETE',
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   }
 };

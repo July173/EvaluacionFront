@@ -1,12 +1,19 @@
 
 
-import { get } from "http";
-import { create } from "domain";
-import { ref } from "process";
+// Normalize the API base URL. Developers should set VITE_API_BASE_URL in
+// the project root (e.g. .env) to a full URL like: http://localhost:8000/api/
+const rawBase = String(import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5147/api/").trim();
 
+// Remove obvious leading dots that break hostnames (e.g. ".127.0.0.1")
+let API_BASE_URL = rawBase.replace(/^\.+/, "");
 
+// If the value doesn't include a scheme, prepend http:// so fetch calls have a protocol.
+if (!/^https?:\/\//i.test(API_BASE_URL)) {
+  API_BASE_URL = `http://${API_BASE_URL}`;
+}
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5147/api/";
+// Ensure trailing slash for consistent concat behavior below
+if (!API_BASE_URL.endsWith("/")) API_BASE_URL += "/";
 
 
 export const ENDPOINTS = {

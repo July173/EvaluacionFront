@@ -11,37 +11,45 @@ export default {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async getAllParents(): Promise<ParentDto[]> {
   const res = await fetchWithAuth(parentBase.getAllParents);
-  return res.json();
+  const data = await res.json().catch(() => []);
+  if (!res.ok) throw data || { message: res.statusText };
+  return data;
   },
 
   async getParentById(id: number): Promise<ParentDto> {
     const url = parentBase.getParentById.replace('{id}', String(id));
   const res = await fetchWithAuth(url);
-  return res.json();
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw data || { message: res.statusText };
+  return data;
   },
 
   async updateParent(id: number, payload: Omit<ParentDto, 'Id'>) {
     const url = parentBase.updateParent.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   },
 
   async deleteParentLogical(id: number) {
     const url = parentBase.deleteParent.replace('{id}', String(id));
     const res = await fetchWithAuth(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: false }),
+      method: 'DELETE',
     });
-    return res.json();
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw data || { message: res.statusText };
+    return data;
   }
 };
